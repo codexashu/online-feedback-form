@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Feedback Form</title>
+    <style>
+        :root {
+            --bg: #f1f5f9;
+            --card: #ffffff;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --text: #0f172a;
+            --muted: #475569;
+            --border: #cbd5e1;
+            --success-bg: #ecfdf5;
+            --success-border: #10b981;
+            --success-text: #065f46;
+            --error-bg: #fef2f2;
+            --error-border: #ef4444;
+            --error-text: #991b1b;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #e0f2fe 0%, var(--bg) 60%, #e2e8f0 100%);
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px 16px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 560px;
+            background: var(--card);
+            border-radius: 16px;
+            box-shadow: 0 12px 32px rgba(15, 23, 42, 0.1);
+            padding: 32px;
+        }
+
+        h1 {
+            margin: 0 0 6px;
+            font-size: 1.65rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .subtitle {
+            margin: 0 0 24px;
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+            font-size: 0.92rem;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.96rem;
+            font-family: inherit;
+            color: var(--text);
+            background: #fff;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .rating-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .rating-option {
+            flex: 1;
+            min-width: 72px;
+        }
+
+        .rating-option input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .rating-option label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            margin: 0;
+            padding: 10px 8px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.15s ease;
+        }
+
+        .rating-option input:checked + label {
+            background: #eff6ff;
+            border-color: var(--primary);
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 12px 18px;
+            border: none;
+            border-radius: 8px;
+            background: var(--primary);
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+
+        button[type="submit"]:hover {
+            background: var(--primary-hover);
+        }
+
+        .alert {
+            margin-top: 18px;
+            padding: 14px 16px;
+            border-radius: 8px;
+            font-size: 0.94rem;
+            display: none;
+        }
+
+        .alert.success {
+            display: block;
+            background: var(--success-bg);
+            border: 1px solid var(--success-border);
+            color: var(--success-text);
+        }
+
+        .alert.error {
+            display: block;
+            background: var(--error-bg);
+            border: 1px solid var(--error-border);
+            color: var(--error-text);
+        }
+    </style>
+</head>
+<body>
+    <main class="container">
+        <h1>Online Feedback Form</h1>
+        <p class="subtitle">Share your experience with us. Your feedback helps us improve.</p>
+
+        <form id="feedbackForm" action="/submit" method="POST">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="you@example.com" required>
+            </div>
+
+            <div class="form-group">
+                <label for="category">Feedback Category</label>
+                <select id="category" name="category" required>
+                    <option value="">-- Select a Category --</option>
+                    <option value="General Feedback">General Feedback</option>
+                    <option value="Website & UI">Website &amp; UI</option>
+                    <option value="Service Quality">Service Quality</option>
+                    <option value="Feature Request">Feature Request</option>
+                    <option value="Bug Report">Bug Report</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Rating</label>
+                <div class="rating-group" role="radiogroup" aria-label="Rating">
+                    <div class="rating-option">
+                        <input type="radio" id="rate1" name="rating" value="1" required>
+                        <label for="rate1">1 &#9733;</label>
+                    </div>
+                    <div class="rating-option">
+                        <input type="radio" id="rate2" name="rating" value="2">
+                        <label for="rate2">2 &#9733;</label>
+                    </div>
+                    <div class="rating-option">
+                        <input type="radio" id="rate3" name="rating" value="3">
+                        <label for="rate3">3 &#9733;</label>
+                    </div>
+                    <div class="rating-option">
+                        <input type="radio" id="rate4" name="rating" value="4">
+                        <label for="rate4">4 &#9733;</label>
+                    </div>
+                    <div class="rating-option">
+                        <input type="radio" id="rate5" name="rating" value="5">
+                        <label for="rate5">5 &#9733;</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="comments">Comments</label>
+                <textarea id="comments" name="comments" placeholder="Write your feedback or comments here..." required></textarea>
+            </div>
+
+            <button type="submit">Submit</button>
+        </form>
+
+        <div id="statusMessage" class="alert" role="status" aria-live="polite"></div>
+    </main>
+
+    <script>
+        const form = document.getElementById('feedbackForm');
+        const statusBox = document.getElementById('statusMessage');
+
+        form.addEventListener('submit', async function (event) {
+            event.preventDefault();
+            statusBox.className = 'alert';
+            statusBox.textContent = '';
+
+            const formData = new URLSearchParams(new FormData(form));
+
+            try {
+                const response = await fetch('/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: formData.toString()
+                });
+
+                const result = await response.json();
+                if (!response.ok) {
+                    statusBox.className = 'alert error';
+                    statusBox.textContent = result.error || 'Unable to submit feedback.';
+                    return;
+                }
+
+                statusBox.className = 'alert success';
+                statusBox.textContent = `Thank you, ${result.name}! Your ${result.rating}/5 feedback for "${result.category}" has been recorded.`;
+                form.reset();
+            } catch (err) {
+                statusBox.className = 'alert error';
+                statusBox.textContent = 'Server is unreachable. Please ensure the Java application is running.';
+            }
+        });
+    </script>
+</body>
+</html>
