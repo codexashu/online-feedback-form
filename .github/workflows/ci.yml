@@ -1,0 +1,40 @@
+name: Maven CI & Docker Build
+
+on:
+  push:
+    branches:
+      - main
+      - "feature/**"
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Run Maven Tests
+        run: mvn -B test
+
+      - name: Package Maven Artifact
+        run: mvn -B package
+
+      - name: Upload JAR Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: online-feedback-form-jar
+          path: target/online-feedback-form-*.jar
+
+      - name: Build Docker Image
+        run: docker build -t codexashu08/online-feedback-form:latest .
