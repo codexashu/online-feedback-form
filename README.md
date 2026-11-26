@@ -16,7 +16,7 @@ online-feedback-form/
 │       └── FeedbackServerTest.java # JUnit 5 tests for HTML form & server endpoints
 ├── index.html                      # Single-page Online Feedback HTML form
 ├── pom.xml                         # Maven configuration & executable JAR packaging
-├── Dockerfile                      # Multi-stage Maven + Temurin JRE container build
+├── Dockerfile                      # Runtime Temurin JRE container image for the packaged JAR
 ├── .dockerignore
 ├── .gitignore
 ├── Jenkinsfile                     # Declarative Jenkins CI pipeline (test, package, Docker)
